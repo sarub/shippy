@@ -1,3 +1,5 @@
+from projectiles import *
+
 class Weapon:
     #Stats
     cost = 5.0
@@ -26,7 +28,7 @@ class Weapon:
         Fires the weapon
         Returns false if unable
         """
-        if not self.firing :
+        if not self.firing:
             if self.alt_mode:
                 cost = self.alt_cost
                 time_between_shots = self.alt_time_between_shots
@@ -37,6 +39,8 @@ class Weapon:
             if ship.consume(cost):
                 self.remaining_time = time_between_shots
                 self.firing = True
+                for p in createProjectiles(ship):
+                    ship.projectiles.append(p)
                 return True
         else:
             return False
@@ -46,3 +50,10 @@ class Weapon:
         Toggles fire mode
         """
         self.alt_mode = not self.alt_mode
+
+    def createProjectiles(self, ship):
+        """
+        Spams new projectiles
+        """
+        projectile = Projectile(ship)
+        return projectile

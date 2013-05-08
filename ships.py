@@ -1,16 +1,12 @@
 from generators import *
 from shields import *
 from weapons import *
+from util import Position
 
 class Ship:
-    #Constants
-    UP = 0
-    RIGHT = 1
-    DOWN = 2
-    LEFT = 3
-
     #Stats
-    velocity = [1.0, 1.0, 1.0, 1.0] #Up, right, down, left    
+    speed = 1.0
+    
     hull = 40.0
 
     #Weapons
@@ -21,7 +17,17 @@ class Ship:
     generator = Generator()
     shield = Shield()
     
+    #Active effects
     effects = []
+
+    #Current position
+    position = None
+
+    #Spammed projectiles
+    projectiles = []
+
+    def __init__(self, position):
+        self.position = position
 
     def fireWeapon(self, weapon):
         """
@@ -59,19 +65,19 @@ class Ship:
         else:
             return False
 
-    def impact(self, power):
+    def impact(self, damage):
         """
         Calculates remaining shield and hull after a hit
         Hull gets twice the damage after shields absortion
         """
-        self.shield.energy -= power
+        self.shield.energy -= damage
         if self.shield.energy < 0:
             self.hull -= -1 * (self.shield.energy * 2)
             self.shield.energy = 0.0
 
-    def getVelocity(self, direction):
+    def move(self, direction):
         """
-        Returns ship velocity for specified direction
+        Moves the ship to a new position
         """
-        return self.velocity[direction]
+        self.position = self.position.getNewPosition(direction, self.speed)
       
