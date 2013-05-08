@@ -1,3 +1,7 @@
+from generators import *
+from shields import *
+from weapons import *
+
 class Ship:
     #Constants
     UP = 0
@@ -10,24 +14,21 @@ class Ship:
     hull = 40.0
 
     #Weapons
-    weapon_main = None
-    weapon_sec = None
+    weapon_main = Weapon()
+    weapon_sec = Weapon()
 
     #Accesories
-    generator = None
-    shield = None
+    generator = Generator()
+    shield = Shield()
     
+    effects = []
 
     def fireWeapon(self, weapon):
         """
-        Fires a weapon if its not on firing process and has enought energy
+        Fires a weapon
+        Returns false if unable to fire
         """
-        if not weapon.isFiring() and self.generator.energy >= weapon.getEnergyCost():
-            weapon.fire()
-            self.generator.energy = self.generator.energy - weapon.getEnergyCost()
-            return True
-        else:
-            return False
+        return weapon.fire(self)
 
     def toggleFireMode(self):
         """
@@ -35,29 +36,42 @@ class Ship:
         """
         self.weapon_sec.toggleMode()
 
-    def tick(self):
+    def tick(self, time):
         """
-            Updates accesories status (shield and generator energy recharge and weapons firing rate)
+            Updates accesories and effects status
         """
-        self.weapon_main.tick()
-        self.weapon_sec.tick()
-        self.generator.tick()
-        self.shield.tick() 
+        for effect in self.effects:
+            effect.tick(self, time)
+
+        self.weapon_main.tick(self, time)
+        self.weapon_sec.tick(self, time)
+        self.generator.tick(self, time)
+        self.shield.tick(self, time)
+
+    def consume(self, cost):
+        """
+        Consumes an amount of energy
+        Returns false if unable
+        """
+        if self.generator.energy >= cost:
+            self.generator.energy -= cost
+            return True
+        else:
+            return False
 
     def impact(self, power):
         """
         Calculates remaining shield and hull after a hit
         Hull gets twice the damage after shields absortion
         """
-        self.shield.energy = self.shield.energy - power
+        self.shield.energy -= power
         if self.shield.energy < 0:
-            self.hull = self.hull - (self.shield.energy * 2)
-            self.shield.energy = 0
+            self.hull -= -1 * (self.shield.energy * 2)
+            self.shield.energy = 0.0
 
     def getVelocity(self, direction):
         """
         Returns ship velocity for specified direction
         """
         return self.velocity[direction]
-            
-
+      
