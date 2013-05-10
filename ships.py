@@ -1,11 +1,14 @@
 from generators import *
 from shields import *
 from weapons import *
-from util import Position
+from util import *
+import pygame
+
 
 class Ship:
     #Stats
-    speed = 1.0
+    image = None
+    speed = 4.0
     
     hull = 40.0
 
@@ -28,6 +31,7 @@ class Ship:
 
     def __init__(self, position):
         self.position = position
+        self.image = pygame.image.load("art/ship_1.png").convert_alpha()
 
     def fireWeapon(self, weapon):
         """
@@ -48,6 +52,9 @@ class Ship:
         """
         for effect in self.effects:
             effect.tick(self, time)
+
+        for projectile in self.projectiles:
+            projectile.tick(time)
 
         self.weapon_main.tick(self, time)
         self.weapon_sec.tick(self, time)
@@ -80,4 +87,15 @@ class Ship:
         Moves the ship to a new position
         """
         self.position = self.position.getNewPosition(direction, self.speed)
+        
+        #Check screen boundaries
+        if self.position.x > WIDTH - self.image.get_width():
+            self.position.x = WIDTH - self.image.get_width()
+        elif self.position.x < 0:
+            self.position.x = 0
+
+        if self.position.y > HEIGHT - self.image.get_height():
+            self.position.y = HEIGHT - self.image.get_height()
+        elif self.position.y < 0:
+            self.position.y = 0
       

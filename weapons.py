@@ -2,8 +2,8 @@ from projectiles import *
 
 class Weapon:
     #Stats
-    cost = 5.0
-    time_between_shots = 1.0
+    cost = 4.0
+    time_between_shots = 2.0
     
     #Alternate mode stats
     alt_cost = 7.5
@@ -39,8 +39,8 @@ class Weapon:
             if ship.consume(cost):
                 self.remaining_time = time_between_shots
                 self.firing = True
-                for p in createProjectiles(ship):
-                    ship.projectiles.append(p)
+                self.createProjectiles(ship)
+                    
                 return True
         else:
             return False
@@ -55,5 +55,9 @@ class Weapon:
         """
         Spams new projectiles
         """
-        projectile = Projectile(ship)
-        return projectile
+        projectile = Projectile(ship, ship.position)
+        ship.projectiles.append(projectile)
+
+        projectile = Projectile(ship, Position(ship.position.x + ship.image.get_width(), ship.position.y))
+        ship.projectiles.append(projectile)
+
