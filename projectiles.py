@@ -22,7 +22,7 @@ class Projectile:
         """
         self.position = self.position.getNewPosition(self.direction, self.speed * time)
         #Check for offscreen
-        if self.position.x < 0 or self.position.x > WIDTH or self.position.y < 0 or self.position.y > HEIGHT:
+        if self.position.x < 0 or self.position.x > SCREEN_WIDTH or self.position.y < 0 or self.position.y > SCREEN_HEIGHT:
             self.owner.projectiles.remove(self)
 
     def collision(self, object):

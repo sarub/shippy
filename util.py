@@ -1,8 +1,8 @@
 import math
 import pygame
 
-WIDTH = 800
-HEIGHT = 600
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
 
 def tileAt(rect, filename, colorkey = None):
     rect = pygame.Rect(rect)

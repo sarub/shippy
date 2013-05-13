@@ -6,7 +6,7 @@ from util import *
 
 #Screen init
 pygame.init()
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 font = pygame.font.SysFont("monospace", 15)
 
@@ -31,6 +31,9 @@ def run():
         if pygame.key.get_pressed()[pygame.K_SPACE]:
             ship.fireWeapon(ship.weapon_main)
 
+        if pygame.key.get_pressed()[pygame.K_LCTRL]:
+            ship.fireWeapon(ship.weapon_sec)
+
         #Check collisions
 
         #Draw screen
@@ -38,15 +41,13 @@ def run():
         pygame.display.flip()
 
         #Update
-        clock.tick(30)
+        clock.tick(60)
         ship.tick(1)
         level.tick(1)
 
-
 def draw():
     #background
-    screen.fill((0, 0, 0))
-    screen.blit(level.background, (0, 0))
+    level.draw(screen)
 
     #ships
     screen.blit(ship.image, (ship.position.x, ship.position.y))

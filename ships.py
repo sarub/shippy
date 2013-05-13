@@ -10,6 +10,7 @@ class Ship:
     image = None
     speed = 4.0
     
+    max_hull = 40.0
     hull = 40.0
 
     #Weapons
@@ -31,7 +32,7 @@ class Ship:
 
     def __init__(self, position):
         self.position = position
-        self.image = pygame.image.load("art/ship_1.png").convert_alpha()
+        self.image = pygame.image.load("art/ship_1.png").convert()
 
     def fireWeapon(self, weapon):
         """
@@ -89,13 +90,13 @@ class Ship:
         self.position = self.position.getNewPosition(direction, self.speed)
         
         #Check screen boundaries
-        if self.position.x > WIDTH - self.image.get_width():
-            self.position.x = WIDTH - self.image.get_width()
+        if self.position.x > SCREEN_WIDTH - self.image.get_width():
+            self.position.x = SCREEN_WIDTH - self.image.get_width()
         elif self.position.x < 0:
             self.position.x = 0
 
-        if self.position.y > HEIGHT - self.image.get_height():
-            self.position.y = HEIGHT - self.image.get_height()
+        if self.position.y > SCREEN_HEIGHT - self.image.get_height():
+            self.position.y = SCREEN_HEIGHT - self.image.get_height()
         elif self.position.y < 0:
             self.position.y = 0
       
