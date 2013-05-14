@@ -15,38 +15,51 @@ class Game:
 
     def run(self):
         run = True
+        pause = False
         while run:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        pause = not pause
 
-            #Player actions
-            if pygame.key.get_pressed()[pygame.K_UP]:
-                ship.move(180)
-            elif pygame.key.get_pressed()[pygame.K_DOWN]:
-                ship.move(0)
+            if not pause:
+                #Player actions
+                if pygame.key.get_pressed()[pygame.K_UP]:
+                    ship.move(180)
+                elif pygame.key.get_pressed()[pygame.K_DOWN]:
+                    ship.move(0)
 
-            if pygame.key.get_pressed()[pygame.K_LEFT]:
-                ship.move(270)
-            elif pygame.key.get_pressed()[pygame.K_RIGHT]:
-                ship.move(90)
+                if pygame.key.get_pressed()[pygame.K_LEFT]:
+                    ship.move(270)
+                elif pygame.key.get_pressed()[pygame.K_RIGHT]:
+                    ship.move(90)
 
-            if pygame.key.get_pressed()[pygame.K_SPACE]:
-                ship.fireWeapon(ship.weapon_main)
+                if pygame.key.get_pressed()[pygame.K_SPACE]:
+                    ship.fireWeapon(ship.weapon_main)
 
-            if pygame.key.get_pressed()[pygame.K_LCTRL]:
-                ship.fireWeapon(ship.weapon_sec)
+                if pygame.key.get_pressed()[pygame.K_LCTRL]:
+                    ship.fireWeapon(ship.weapon_sec)
 
-            #Check collisions
+                #Check collisions
+
+                #Update
+                self.clock.tick(60)
+                self.ship.tick()
+                self.level.tick()
+
 
             #Draw screen
             self.draw()
-            pygame.display.flip()
 
-            #Update
-            self.clock.tick(60)
-            self.ship.tick()
-            self.level.tick()
+            if pause:
+                s = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
+                s.fill((0, 0, 0, 128))
+                s.blit(self.font.render("Pause", 40, (255, 255, 255)), (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
+                screen.blit(s, (0,0))
+
+            pygame.display.flip()
 
     def draw(self):
         #background
