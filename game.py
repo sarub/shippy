@@ -82,6 +82,6 @@ pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 ship = Ship(Position(400, 500))
-level = Level("Level_0")
+level = Level("level_0")
 game = Game(ship, level)
 
