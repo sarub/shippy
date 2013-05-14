@@ -13,12 +13,12 @@ class Weapon:
     firing = False
     alt_mode = False
 
-    def tick(self, ship, time):
+    def tick(self, ship):
         """
         Updates remaining time to next shot
         """
         if self.firing:
-            self.remaining_time -= time
+            self.remaining_time -= 1
             if self.remaining_time <= 0:
                 self.firing = False
                 self.remaining_time = 0.0
@@ -55,9 +55,17 @@ class Weapon:
         """
         Spams new projectiles
         """
-        projectile = Projectile(ship, ship.position)
+        projectile = Projectile(ship, Position(ship.position.x + ship.image.get_width() / 2, ship.position.y), 180)
         ship.projectiles.append(projectile)
 
-        projectile = Projectile(ship, Position(ship.position.x + ship.image.get_width(), ship.position.y))
-        ship.projectiles.append(projectile)
+class SideWeapon(Weapon):
+    cost = 15
+    time_between_shots = 20.0
+
+    def createProjectiles(self, ship):
+        """
+        Spams new projectiles
+        """
+        ship.projectiles.append(Bomb(ship, Position(ship.position.x, ship.position.y), 225))
+        ship.projectiles.append(Bomb(ship, Position(ship.position.x + ship.image.get_width(), ship.position.y), 135))
 

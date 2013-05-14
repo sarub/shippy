@@ -15,7 +15,7 @@ class Ship:
 
     #Weapons
     weapon_main = Weapon()
-    weapon_sec = Weapon()
+    weapon_sec = SideWeapon()
 
     #Accesories
     generator = Generator()
@@ -47,20 +47,20 @@ class Ship:
         """
         self.weapon_sec.toggleMode()
 
-    def tick(self, time):
+    def tick(self):
         """
             Updates accesories and effects status
         """
         for effect in self.effects:
-            effect.tick(self, time)
+            effect.tick(self)
 
         for projectile in self.projectiles:
-            projectile.tick(time)
+            projectile.tick()
 
-        self.weapon_main.tick(self, time)
-        self.weapon_sec.tick(self, time)
-        self.generator.tick(self, time)
-        self.shield.tick(self, time)
+        self.weapon_main.tick(self)
+        self.weapon_sec.tick(self)
+        self.generator.tick(self)
+        self.shield.tick(self)
 
     def consume(self, cost):
         """

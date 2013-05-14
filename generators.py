@@ -4,11 +4,11 @@ class Generator:
     energy = 100.0
     rate = 0.5
 
-    def tick(self, ship, time):
+    def tick(self, ship):
         """
         Updates energy
         """
         if self.energy < self.max_capacity:
-            self.energy += self.rate * time
+            self.energy += self.rate
 
 
