@@ -27,22 +27,28 @@ class Game:
             if not pause:
                 #Player actions
                 if pygame.key.get_pressed()[pygame.K_UP]:
-                    ship.move(180)
+                    self.ship.move(180)
                 elif pygame.key.get_pressed()[pygame.K_DOWN]:
-                    ship.move(0)
+                    self.ship.move(0)
 
                 if pygame.key.get_pressed()[pygame.K_LEFT]:
-                    ship.move(270)
+                    self.ship.move(270)
                 elif pygame.key.get_pressed()[pygame.K_RIGHT]:
-                    ship.move(90)
+                    self.ship.move(90)
 
                 if pygame.key.get_pressed()[pygame.K_SPACE]:
-                    ship.fireWeapon(ship.weapon_main)
+                    self.ship.fireWeapon(ship.weapon_main)
 
                 if pygame.key.get_pressed()[pygame.K_LCTRL]:
-                    ship.fireWeapon(ship.weapon_sec)
+                    self.ship.fireWeapon(ship.weapon_sec)
 
                 #Check collisions
+                for enemy in self.level.spammed_enemys:
+                    for projectile in self.ship.projectiles:
+                        if doRectsOverlap(
+                            projectile.image.get_rect().move(projectile.position.x, projectile.position.y),
+                            enemy.image.get_rect().move(enemy.position.x, enemy.position.y)):
+                            projectile.collision(enemy)
 
                 #Update
                 self.clock.tick(60)
@@ -67,15 +73,18 @@ class Game:
 
         #ships
         screen.blit(self.ship.image, (self.ship.position.x, self.ship.position.y))
+        for ship in self.level.spammed_enemys:
+            screen.blit(ship.image, (ship.position.x, ship.position.y)) 
 
         #Projectiles
         for projectile in self.ship.projectiles:
-            projectile.draw(screen)
+            screen.blit(projectile.image, (projectile.position.x, projectile.position.y)) 
 
         #HUD
         screen.blit(self.font.render("Energy: " + str(self.ship.generator.energy), 1, (255, 255, 255)), (650, 10))
         screen.blit(self.font.render("Shields: " + str(self.ship.shield.energy), 1, (255, 255, 255)), (650, 30))
         screen.blit(self.font.render("Hull: " + str(self.ship.hull), 1, (255, 255, 255)), (650, 50))
+        screen.blit(self.font.render("Score: " + str(self.ship.score), 1, (255, 255, 255)), (650, 70))
 
 
 pygame.init()

@@ -1,10 +1,13 @@
 import pygame
 import tiledtmxloader
 from util import *
+from enemys import *
+import random
 
-class Level:
+class Level(object):
     counter = 0
     speed = 2.0
+    spammed_enemys = []
     
     def __init__(self, name):
         self.world_map = tiledtmxloader.tmxreader.TileMapParser().parse_decode("maps/" + name + ".tmx")
@@ -17,6 +20,12 @@ class Level:
 
     def tick(self):
         self.counter += self.speed
+
+        for enemy in self.spammed_enemys:
+            enemy.tick()
+
+        if self.counter % 320 == 0:
+            self.spammed_enemys.append(Enemy(Position(random.randrange(SCREEN_WIDTH), 0), self))
         
     def draw(self, screen):       
         self.renderer.set_camera_position(0, self.world_map.pixel_height - self.counter - SCREEN_HEIGHT, "topleft")

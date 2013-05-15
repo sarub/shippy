@@ -55,7 +55,7 @@ class Weapon:
         """
         Spams new projectiles
         """
-        projectile = Projectile(ship, Position(ship.position.x + ship.image.get_width() / 2, ship.position.y), 180)
+        projectile = Projectile(ship, Position(ship.position.x + ship.image.get_width() / 2, ship.position.y), 180, 10.0)
         ship.projectiles.append(projectile)
 
 class SideWeapon(Weapon):
@@ -66,6 +66,6 @@ class SideWeapon(Weapon):
         """
         Spams new projectiles
         """
-        ship.projectiles.append(Bomb(ship, Position(ship.position.x, ship.position.y), 225))
-        ship.projectiles.append(Bomb(ship, Position(ship.position.x + ship.image.get_width(), ship.position.y), 135))
+        ship.projectiles.append(Bomb(ship, Position(ship.position.x, ship.position.y), 225, 20.0))
+        ship.projectiles.append(Bomb(ship, Position(ship.position.x + ship.image.get_width(), ship.position.y), 135, 20.0))
 

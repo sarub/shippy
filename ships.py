@@ -5,7 +5,7 @@ from util import *
 import pygame
 
 
-class Ship:
+class Ship(object):
     #Stats
     image = None
     speed = 4.0
@@ -29,6 +29,8 @@ class Ship:
 
     #Spammed projectiles
     projectiles = []
+
+    score = 0
 
     def __init__(self, position):
         self.position = position
@@ -79,8 +81,8 @@ class Ship:
         Hull gets twice the damage after shields absortion
         """
         self.shield.energy -= damage
-        if self.shield.energy < 0:
-            self.hull -= -1 * (self.shield.energy * 2)
+        if self.shield.energy < 0.0:
+            self.hull += (self.shield.energy)
             self.shield.energy = 0.0
 
     def move(self, direction):
