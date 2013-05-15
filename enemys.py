@@ -27,9 +27,14 @@ class Enemy(Ship):
             or self.position.y < 0:
             self.level.spammed_enemys.remove(self)
 
-    def impact(self, projectile):
-        self.hull -= projectile.damage
+    def impact(self, damage, owner=None):
+        self.hull -= damage
 
         if self.hull <= 0.0:
-            self.level.spammed_enemys.remove(self)
-            projectile.owner.score += self.value
+            try:
+                self.level.spammed_enemys.remove(self)
+            except:
+                pass
+
+            if owner is not None:
+                owner.score += self.value

@@ -34,7 +34,7 @@ class Projectile(object):
         """
         Manages the collision with other object
         """
-        ship.impact(self)
+        ship.impact(self.damage, self.owner)
 
         self.owner.projectiles.remove(self)
 

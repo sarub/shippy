@@ -44,6 +44,14 @@ class Game:
 
                 #Check collisions
                 for enemy in self.level.spammed_enemys:
+                    if doRectsOverlap(
+                        self.ship.image.get_rect().move( self.ship.position.x,  self.ship.position.y),
+                        enemy.image.get_rect().move(enemy.position.x, enemy.position.y)):
+                        self.ship.impact(50.0)
+                        enemy.impact(75.0)
+                        self.ship.move(90, 10.0)
+                               
+
                     for projectile in self.ship.projectiles:
                         if doRectsOverlap(
                             projectile.image.get_rect().move(projectile.position.x, projectile.position.y),

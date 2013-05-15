@@ -85,11 +85,14 @@ class Ship(object):
             self.hull += (self.shield.energy)
             self.shield.energy = 0.0
 
-    def move(self, direction):
+    def move(self, direction, speed=None):
         """
         Moves the ship to a new position
         """
-        self.position = self.position.getNewPosition(direction, self.speed)
+        if speed is None:
+            speed = self.speed
+
+        self.position = self.position.getNewPosition(direction, speed)
         
         #Check screen boundaries
         if self.position.x > SCREEN_WIDTH - self.image.get_width():
