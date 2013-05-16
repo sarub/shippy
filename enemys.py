@@ -1,5 +1,7 @@
 from util import *
 from ships import Ship
+from generators import *
+from weapons import *
 
 class Enemy(Ship):    
     hull = 125.0
@@ -9,10 +11,15 @@ class Enemy(Ship):
         self.position = position
         self.level = level
         self.image = pygame.image.load("art/ship_1.png").convert()
+        self.generator = Generator()
+        self.shield = Shield()
+        self.weapon_main = BackWeapon(self)
+        self.weapon_sec = Weapon(self)
 
     def tick(self):
         super(Enemy, self).tick()
         self.move(0)
+        self.fireWeapon(self.weapon_main)
 
     def move(self, direction):
         """

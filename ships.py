@@ -12,14 +12,6 @@ class Ship(object):
     
     max_hull = 40.0
     hull = 40.0
-
-    #Weapons
-    weapon_main = Weapon()
-    weapon_sec = SideWeapon()
-
-    #Accesories
-    generator = Generator()
-    shield = Shield()
     
     #Active effects
     effects = []
@@ -27,21 +19,23 @@ class Ship(object):
     #Current position
     position = None
 
-    #Spammed projectiles
-    projectiles = []
-
     score = 0
 
-    def __init__(self, position):
+    def __init__(self, position, level):
         self.position = position
         self.image = pygame.image.load("art/ship_1.png").convert()
+        self.level = level
+        self.weapon_main = Weapon(self)
+        self.weapon_sec = SideWeapon(self)
+        self.generator = Generator()
+        self.shield = Shield()
 
     def fireWeapon(self, weapon):
         """
         Fires a weapon
         Returns false if unable to fire
         """
-        return weapon.fire(self)
+        return weapon.fire()
 
     def toggleFireMode(self):
         """
@@ -56,11 +50,8 @@ class Ship(object):
         for effect in self.effects:
             effect.tick(self)
 
-        for projectile in self.projectiles:
-            projectile.tick()
-
-        self.weapon_main.tick(self)
-        self.weapon_sec.tick(self)
+        self.weapon_main.tick()
+        self.weapon_sec.tick()
         self.generator.tick(self)
         self.shield.tick(self)
 
@@ -75,7 +66,7 @@ class Ship(object):
         else:
             return False
 
-    def impact(self, damage):
+    def impact(self, damage, owner = None):
         """
         Calculates remaining shield and hull after a hit
         Hull gets twice the damage after shields absortion

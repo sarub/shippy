@@ -12,8 +12,11 @@ class Weapon:
     remaining_time = 0.0
     firing = False
     alt_mode = False
+    
+    def __init__(self, owner):
+        self.owner = owner
 
-    def tick(self, ship):
+    def tick(self):
         """
         Updates remaining time to next shot
         """
@@ -23,7 +26,7 @@ class Weapon:
                 self.firing = False
                 self.remaining_time = 0.0
 
-    def fire(self, ship):
+    def fire(self):
         """
         Fires the weapon
         Returns false if unable
@@ -36,10 +39,10 @@ class Weapon:
                 cost = self.cost
                 time_between_shots = self.time_between_shots 
 
-            if ship.consume(cost):
+            if self.owner.consume(cost):
                 self.remaining_time = time_between_shots
                 self.firing = True
-                self.createProjectiles(ship)
+                self.createProjectiles()
                     
                 return True
         else:
@@ -51,21 +54,38 @@ class Weapon:
         """
         self.alt_mode = not self.alt_mode
 
-    def createProjectiles(self, ship):
+    def createProjectiles(self):
         """
         Spams new projectiles
         """
-        projectile = Projectile(ship, Position(ship.position.x + ship.image.get_width() / 2, ship.position.y), 180, 10.0)
-        ship.projectiles.append(projectile)
+        projectile = Projectile(self.owner, Position(self.owner.position.x + self.owner.image.get_width() / 2, self.owner.position.y), 180, 10.0)
+        self.owner.level.projectiles.append(projectile)
+
+class BackWeapon(Weapon):
+    cost = 4.0
+    time_between_shots = 20.0
+    remaining_time = 0.0
+    firing = False
+    alt_mode = False
+
+    def createProjectiles(self):
+        """
+        Spams new projectiles
+        """
+        self.owner.level.projectiles.append(Projectile(self.owner, Position(self.owner.position.x, self.owner.position.y + self.owner.image.get_height()), 340, 20.0, 5))
+        self.owner.level.projectiles.append(Projectile(self.owner, Position(self.owner.position.x + self.owner.image.get_width(), self.owner.position.y + self.owner.image.get_height()), 20, 20.0, 5))
 
 class SideWeapon(Weapon):
     cost = 15
     time_between_shots = 20.0
+    remaining_time = 0.0
+    firing = False
+    alt_mode = False
 
-    def createProjectiles(self, ship):
+    def createProjectiles(self):
         """
         Spams new projectiles
         """
-        ship.projectiles.append(Bomb(ship, Position(ship.position.x, ship.position.y), 225, 20.0))
-        ship.projectiles.append(Bomb(ship, Position(ship.position.x + ship.image.get_width(), ship.position.y), 135, 20.0))
+        self.owner.level.projectiles.append(Projectile(self.owner, Position(self.owner.position.x, self.owner.position.y), 225, 20.0))
+        self.owner.level.projectiles.append(Projectile(self.owner, Position(self.owner.position.x + self.owner.image.get_width(), self.owner.position.y), 135, 20.0))
 

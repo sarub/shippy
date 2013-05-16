@@ -8,6 +8,7 @@ class Level(object):
     counter = 0
     speed = 2.0
     spammed_enemys = []
+    projectiles = []
     
     def __init__(self, name):
         self.world_map = tiledtmxloader.tmxreader.TileMapParser().parse_decode("maps/" + name + ".tmx")
@@ -23,6 +24,8 @@ class Level(object):
 
         for enemy in self.spammed_enemys:
             enemy.tick()
+        for projectile in self.projectiles:
+            projectile.tick()
 
         if self.counter % 320 == 0:
             self.spammed_enemys.append(Enemy(Position(random.randrange(SCREEN_WIDTH), 0), self))
